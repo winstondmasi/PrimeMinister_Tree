@@ -21,9 +21,10 @@ public class PMTree {
     }
 
     private Node root = null;
-
+    
+    //EXER 1.3 RETRIEVE NAME
     public String getName (int days) {
-        return getName(days);
+        return getNode(days).name; // as name implies get the nodes name that corresponds with the parameter day
     }
 
     private Node getNode (int days) {
@@ -139,36 +140,6 @@ public class PMTree {
     public static void main(String[] args) {
 
         PMTree resulting_PmTree = new PMTree();
-
-        System.out.println(resulting_PmTree.getName(365* 0 + 144));//Get "The Viscount Goderich"
-        resulting_PmTree.delete(365* 0 + 144);// Delete "The Viscount Goderich"
-        System.out.println(resulting_PmTree.getName(365* 0 + 211));//Get "Bonar Law"
-
-
-        int i = 0, income;
-        PMList.getPrimeMinisters();
-        income = PMList.INCOMPLETE[i];
-
-        Node heaNode = null;
-
-        //an array declared 
-        int values_to_get[] = {10, 20, 30,40,50};
-
-        for (int get : values_to_get){
-            //resulting_PmTree.root = resulting_PmTree.insert(get, heaNode);
-        }
-
-        int w = 4;
-        String smol = resulting_PmTree.nthShortest(w);
-
-        if(smol == null){
-
-        }else{
-            
-        }
-
-
-
 
     }
 }
