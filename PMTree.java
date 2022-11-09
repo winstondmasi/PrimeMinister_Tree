@@ -1,15 +1,18 @@
+import java.util.ArrayList;
+
 public class PMTree {
     private class Node {
         Node parent;
         Node left, right;
         int days;
-        String name; //adding string component
+        String name; //EXER 1.1 ADD STRING COMPONENT
+        int current_node_number = 0; // measure current node position
 
         Node (Node parent, int days, String names) {
             this.parent = parent;
             this.days = days;
             this.left = this.right = null;
-            this.name = name;
+            this.name = name; //EXER 1.1 ADD STRING COMPONENT
         }
 
         /*
@@ -40,37 +43,36 @@ public class PMTree {
         return null;
     }
 
+    //EXER 1.2 MODIFY INSERT AND DELETE
     public void insert (int days, String name) {
         Node cur = root;
         if (root == null) {
-            root = new Node (null, days, name);
+            root = new Node (null, days, name); 
             return;
         }
 
         while (true) {
-            if (days == cur.days)
+            if (days == cur.days){
+                cur.name = name; //if tree with duplicate day exists update the name to match
                 return;
+            }
             else if (days < cur.days) {
                 if (cur.left == null) {
                     cur.left = new Node (cur, days, name);
+                    cur.left.current_node_number += 1; //increment node to match its current position
                     return;
                 } else
                     cur = cur.left;
             } else {
                 if (cur.right == null) {
                     cur.right = new Node (cur, days, name);
+                    cur.right.current_node_number += 1; //increment node to match its current position
                     return;
                 } else
                     cur = cur.right;
             }
         }
     }
-
-    
-    public String nthShortest(int n){
-       return nthShortest(n);
-    }
-
 
     /*
      *  Delete a node from the tree. If the node has one child or none,
@@ -81,7 +83,9 @@ public class PMTree {
      *  Note that, by construction, that node has at most one child (it has
      *  no left child because a left child would contain a smaller value).
      */
-    public void delete (int days, String name) {
+
+    //EXER 1.2 & 2 MODIFY INSERT AND DELETE
+    public void delete (int days) {
         Node node = getNode (days);
         if (node == null)
             return;
@@ -92,6 +96,12 @@ public class PMTree {
             Node min = getMinNode(node.right);
             simpleDelete (min);
             node.days = min.days;
+        }
+
+        //if the number of nodes the parent has is more than 0
+        //reduce the count of it
+        if(node.parent.numChildren() > 0){
+            node.parent.current_node_number -= 1;
         }
     }
 
@@ -131,15 +141,31 @@ public class PMTree {
         return node;
     }
 
-    
 
+    //EXER 3 NTHSHORTEST
+    public String nthShortest(int n){
+        return nthShortest(n);
+    }
+
+    //EXER 4 ALL_N_SHORTEST
     public String[] allNShortest (int n){
         return null;
     }
-
+    
+    //EXER 5 MAIN
     public static void main(String[] args) {
-
+        /*
+         * Initialize new PM_Tree
+         * Initialize Arraylist with data type: Entry from PMList
+         * 
+         * loop through list and call insert(); to add list of prime ministers to new tree
+         */
         PMTree resulting_PmTree = new PMTree();
+        ArrayList<PMList.Entry> prime_miniArrayList = (ArrayList<PMList.Entry>)PMList.getPrimeMinisters();
+
+        for(PMList.Entry getInfo : prime_miniArrayList){
+            resulting_PmTree.insert(getInfo.days, getInfo.name);
+        }
 
     }
 }
