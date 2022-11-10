@@ -143,8 +143,16 @@ public class PMTree {
 
 
     //EXER 3 NTHSHORTEST
+    int count;
+    String prime_min_the_nTH;
     public String nthShortest(int n){
         return nthShortest(n);
+    }
+
+    //function that serves as inorder traversal method
+    //to find the nth shortest prime minister in EXER 3
+    public void inorder_traversal_method(Node head_node, int day_of_PM){
+        
     }
 
     //EXER 4 ALL_N_SHORTEST
@@ -166,6 +174,16 @@ public class PMTree {
         for(PMList.Entry getInfo : prime_miniArrayList){
             resulting_PmTree.insert(getInfo.days, getInfo.name);
         }
+
+        //Printing 10th, 20th, 30th, 40th and 50th shortest-serving prime ministers.
+        System.out.println("10th shortest serving prime minister: " + resulting_PmTree.nthShortest(10));
+        System.out.println("20th shortest serving prime minister: " + resulting_PmTree.nthShortest(20));
+        System.out.println("30th shortest serving prime minister: " + resulting_PmTree.nthShortest(30));
+        System.out.println("40th shortest serving prime minister: " + resulting_PmTree.nthShortest(40));
+        System.out.println("50th shortest serving prime minister: " + resulting_PmTree.nthShortest(50));
+        
+        //Printing the 10 shortest serving prime-ministers
+        System.out.println("\nThe 10 shortest serving prime ministers are: \n");
 
     }
 }
