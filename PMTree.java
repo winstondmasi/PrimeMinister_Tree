@@ -84,7 +84,7 @@ public class PMTree {
      *  no left child because a left child would contain a smaller value).
      */
 
-    //EXER 1.2 & 2 MODIFY INSERT AND DELETE
+    //EXER 1.2 MODIFY INSERT AND DELETE
     public void delete (int days) {
         Node node = getNode (days);
         if (node == null)
@@ -140,18 +140,52 @@ public class PMTree {
             node = node.left;
         return node;
     }
-
-
-    //EXER 3 NTHSHORTEST
-    int count;
-    String prime_min_the_nTH;
-    public String nthShortest(int n){
-        return nthShortest(n);
+    
+    //EXER 2 TRACK SUBTREE SIZE
+    public int ret_size_of_sub(Node Node_SubsizNode){
+        //base case
+        if(Node_SubsizNode == null){
+            return 0;
+        }else{
+            //recursive return value of left node and right node + 1
+            return(ret_size_of_sub(Node_SubsizNode.left) + ret_size_of_sub(Node_SubsizNode.right) + 1);
+        }
     }
 
-    //function that serves as inorder traversal method
+    //EXER 3 NTHSHORTEST
+    int sum;
+    String nth_short_found;
+    public String nthShortest(int n){
+        sum = 0;
+        inorder_traversal_method(root, n);
+        return nth_short_found;
+    }
+
+    //function that serves as inorder search method for the binary tree
     //to find the nth shortest prime minister in EXER 3
-    public void inorder_traversal_method(Node head_node, int day_of_PM){
+    public void inorder_traversal_method(Node head_node, int prime_shortest){
+        //base case
+        if(head_node == null){
+            return;
+        }  
+        /*
+         * if sum is less than or equal to int prime shortest, recursively traverse through the left side of tree
+         * whilst incrementing sum until sum is == to the int we are looking for,
+         * then nth_short_found will be assigned as to head_node name
+         * 
+         * After that we are going to traverse the right side of the tree also recursively
+         */
+        if(sum <= prime_shortest){
+            inorder_traversal_method(head_node.left, prime_shortest);
+            sum++;
+
+            if(sum == prime_shortest){
+                nth_short_found = head_node.name;
+                return;
+            }
+        }
+
+        inorder_traversal_method(head_node.right, prime_shortest);
         
     }
 
