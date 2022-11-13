@@ -8,7 +8,7 @@ public class PMTree {
         String name; //EXER 1.1 ADD STRING COMPONENT
         int current_node_number = 0; // measure current node position
 
-        Node (Node parent, int days, String names) {
+        Node (Node parent, int days, String name) {
             this.parent = parent;
             this.days = days;
             this.left = this.right = null;
@@ -27,7 +27,7 @@ public class PMTree {
     
     //EXER 1.3 RETRIEVE NAME
     public String getName (int days) {
-        return getNode(days).name; // as name implies get the nodes name that corresponds with the parameter day
+            return getNode(days).name; // as name implies get the nodes name that corresponds with the parameter day
     }
 
     private Node getNode (int days) {
@@ -43,7 +43,7 @@ public class PMTree {
         return null;
     }
 
-    //EXER 1.2 MODIFY INSERT AND DELETE
+    //EXER 1.1 & 1.2 MODIFY INSERT AND DELETE
     public void insert (int days, String name) {
         Node cur = root;
         if (root == null) {
@@ -153,10 +153,14 @@ public class PMTree {
     }
 
     //EXER 3 NTHSHORTEST
-    int sum;
-    String nth_short_found;
+    int sum = 0;
+    String nth_short_found = " ";
     public String nthShortest(int n){
         sum = 0;
+        nth_short_found = " ";
+        //check if n is larger than the length of the tree
+        //if it is it's not valid and return null
+        if(n > this.ret_size_of_sub(root)) return null;
         inorder_traversal_method(root, n);
         return nth_short_found;
     }
@@ -183,15 +187,18 @@ public class PMTree {
                 nth_short_found = head_node.name;
                 return;
             }
-        }
-
-        inorder_traversal_method(head_node.right, prime_shortest);
-        
+            inorder_traversal_method(head_node.right, prime_shortest);
+        }        
     }
 
     //EXER 4 ALL_N_SHORTEST
     public String[] allNShortest (int n){
-        return null;
+        String[] all_n_s = new String[10];
+
+        for(int i = 0; i < n; i++){
+            all_n_s[i] = this.nthShortest(i);
+        }
+        return all_n_s;
     }
     
     //EXER 5 MAIN
@@ -210,14 +217,30 @@ public class PMTree {
         }
 
         //Printing 10th, 20th, 30th, 40th and 50th shortest-serving prime ministers.
-        System.out.println("10th shortest serving prime minister: " + resulting_PmTree.nthShortest(10));
-        System.out.println("20th shortest serving prime minister: " + resulting_PmTree.nthShortest(20));
-        System.out.println("30th shortest serving prime minister: " + resulting_PmTree.nthShortest(30));
-        System.out.println("40th shortest serving prime minister: " + resulting_PmTree.nthShortest(40));
-        System.out.println("50th shortest serving prime minister: " + resulting_PmTree.nthShortest(50));
+        System.out.println("\n10th shortest serving prime minister is: " + resulting_PmTree.nthShortest(10));
+        System.out.println("20th shortest serving prime minister is: " + resulting_PmTree.nthShortest(20));
+        System.out.println("30th shortest serving prime minister is: " + resulting_PmTree.nthShortest(30));
+        System.out.println("40th shortest serving prime minister is: " + resulting_PmTree.nthShortest(40));
+        System.out.println("50th shortest serving prime minister is: " + resulting_PmTree.nthShortest(50));
         
         //Printing the 10 shortest serving prime-ministers
-        System.out.println("\nThe 10 shortest serving prime ministers are: \n");
+        System.out.println("\nThe 10 shortest serving prime ministers are: ");
+        String[] aspm = resulting_PmTree.allNShortest(10);
+        for(String print_all_shortest : aspm) System.out.println(print_all_shortest);
 
+        //REMOVE DEAD PM FROM THE LIST
+        int[] impartial = PMList.INCOMPLETE;
+        for (int fodder : impartial) {
+            resulting_PmTree.delete(fodder);
+        }
+
+        //PRINT LIST AFTER DELETION
+        System.out.println("\nThe 10 Shortest Prime Ministers: After Deleting From PMList.INCOMPLETE");
+        String[] delete_impartial = resulting_PmTree.allNShortest(10);
+        for(String erased : delete_impartial){
+            System.out.println(erased);
+        }
+
+        resulting_PmTree.getName(25);
     }
 }
