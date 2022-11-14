@@ -6,7 +6,7 @@ public class PMTree {
         Node left, right;
         int days;
         String name; //EXER 1.1 ADD STRING COMPONENT
-        int current_node_number = 0; // measure current node position
+        int current_node_number = 0; // EXER 2 measure current node position
 
         Node (Node parent, int days, String name) {
             this.parent = parent;
@@ -26,8 +26,31 @@ public class PMTree {
     private Node root = null;
     
     //EXER 1.3 RETRIEVE NAME
-    public String getName (int days) {
-            return getNode(days).name; // as name implies get the nodes name that corresponds with the parameter day
+    int sum = 0;
+    String nth_short_found = " ";
+    public String getName (int days){
+        Node checking = root;
+        nth_short_found = " ";
+
+        while(true){
+            if(days == checking.days){
+                nth_short_found = checking.name;
+                return nth_short_found;
+            }
+            else if(days < checking.days){
+                if(checking.left == null){
+                    checking.left.current_node_number += 1;
+                }else{
+                    checking = checking.left;
+                }
+            }else{
+                if(checking.right == null){
+                    checking.right.current_node_number++;
+                }else{
+                    checking = checking.right;
+                }
+            }
+        }
     }
 
     private Node getNode (int days) {
@@ -59,14 +82,14 @@ public class PMTree {
             else if (days < cur.days) {
                 if (cur.left == null) {
                     cur.left = new Node (cur, days, name);
-                    cur.left.current_node_number += 1; //increment node to match its current position
+                    cur.left.current_node_number += 1; // EXER 2 increment node to match its current position
                     return;
                 } else
                     cur = cur.left;
             } else {
                 if (cur.right == null) {
                     cur.right = new Node (cur, days, name);
-                    cur.right.current_node_number += 1; //increment node to match its current position
+                    cur.right.current_node_number += 1; // EXER 2 increment node to match its current position
                     return;
                 } else
                     cur = cur.right;
@@ -100,7 +123,7 @@ public class PMTree {
 
         //if the number of nodes the parent has is more than 0
         //reduce the count of it
-        if(node.parent.numChildren() > 0){
+        if(node.parent != null){
             node.parent.current_node_number -= 1;
         }
     }
@@ -140,27 +163,16 @@ public class PMTree {
             node = node.left;
         return node;
     }
-    
-    //EXER 2 TRACK SUBTREE SIZE
-    public int ret_size_of_sub(Node Node_SubsizNode){
-        //base case
-        if(Node_SubsizNode == null){
-            return 0;
-        }else{
-            //recursive return value of left node and right node + 1
-            return(ret_size_of_sub(Node_SubsizNode.left) + ret_size_of_sub(Node_SubsizNode.right) + 1);
-        }
-    }
 
-    //EXER 3 NTHSHORTEST
-    int sum = 0;
-    String nth_short_found = " ";
+    //EXER 3 NTH-SHORTEST
     public String nthShortest(int n){
+        /*
+        use the inorder traversal method defined earlier to traverse through the tree
+        find the corresponding day and
+        return the string "nth_short_found" to match
+         */
         sum = 0;
         nth_short_found = " ";
-        //check if n is larger than the length of the tree
-        //if it is it's not valid and return null
-        if(n > this.ret_size_of_sub(root)) return null;
         inorder_traversal_method(root, n);
         return nth_short_found;
     }
@@ -193,11 +205,14 @@ public class PMTree {
 
     //EXER 4 ALL_N_SHORTEST
     public String[] allNShortest (int n){
-        String[] all_n_s = new String[10];
-
-        for(int i = 0; i < n; i++){
-            all_n_s[i] = this.nthShortest(i);
-        }
+        /*
+        Make a string array
+        loop through the array n times and
+        assign each index of the string array to each index of nthShortest
+        then return string array
+         */
+        String[] all_n_s = new String[11];
+        for(int i = 0; i < n; i++){ all_n_s[i] = this.nthShortest(i);}
         return all_n_s;
     }
     
@@ -206,15 +221,17 @@ public class PMTree {
         /*
          * Initialize new PM_Tree
          * Initialize Arraylist with data type: Entry from PMList
-         * 
          * loop through list and call insert(); to add list of prime ministers to new tree
          */
         PMTree resulting_PmTree = new PMTree();
         ArrayList<PMList.Entry> prime_miniArrayList = (ArrayList<PMList.Entry>)PMList.getPrimeMinisters();
+        for(PMList.Entry getInfo : prime_miniArrayList){resulting_PmTree.insert(getInfo.days, getInfo.name);}
 
-        for(PMList.Entry getInfo : prime_miniArrayList){
-            resulting_PmTree.insert(getInfo.days, getInfo.name);
+        /*OR ANOTHER SOLUTION TO INSERT DAYS AND NAME
+        for(int w = 0; i < PMList.getPrimeMinisters().size(); w++){
+            resulting_PmTree.insert(PMList.getPrimeMinisters().get(w).days, PMList.getPrimeMinisters().get(w).name);
         }
+        */
 
         //Printing 10th, 20th, 30th, 40th and 50th shortest-serving prime ministers.
         System.out.println("\n10th shortest serving prime minister is: " + resulting_PmTree.nthShortest(10));
@@ -225,22 +242,21 @@ public class PMTree {
         
         //Printing the 10 shortest serving prime-ministers
         System.out.println("\nThe 10 shortest serving prime ministers are: ");
-        String[] aspm = resulting_PmTree.allNShortest(10);
+        String[] aspm = resulting_PmTree.allNShortest(11);
         for(String print_all_shortest : aspm) System.out.println(print_all_shortest);
 
         //REMOVE DEAD PM FROM THE LIST
         int[] impartial = PMList.INCOMPLETE;
-        for (int fodder : impartial) {
-            resulting_PmTree.delete(fodder);
-        }
+        for (int fodder : impartial) {resulting_PmTree.delete(fodder);}
 
         //PRINT LIST AFTER DELETION
         System.out.println("\nThe 10 Shortest Prime Ministers: After Deleting From PMList.INCOMPLETE");
-        String[] delete_impartial = resulting_PmTree.allNShortest(10);
-        for(String erased : delete_impartial){
-            System.out.println(erased);
-        }
+        String[] deleted_impartial = resulting_PmTree.allNShortest(11);
+        for(String erased : deleted_impartial){ System.out.println(erased);}
 
-        resulting_PmTree.getName(25);
+        System.out.println("\n" + "Testing getName() method: " + "\n");
+        System.out.println("getName (49 days): " + resulting_PmTree.getName(49));
+        System.out.println("getName (3 years and 259 days): " + resulting_PmTree.getName(365* 3 + 259));
+        System.out.println("getName (6 years and 255 days): " + resulting_PmTree.getName(365* 6 + 255));
     }
 }
