@@ -181,13 +181,13 @@ public class PMTree {
          */
         sum = 0;
         nth_short_found = " ";
-        inorder_traversal_method(root, n);
+        inorder_traversal_method_recur(root, n);
         return nth_short_found;
     }
 
     //function that serves as inorder search method for the binary tree
     //to find the nth shortest prime minister in EXER 3
-    public void inorder_traversal_method(Node head_node, int prime_shortest){
+    public void inorder_traversal_method_recur(Node head_node, int prime_shortest){
         //base case
         if(head_node == null){
             return;
@@ -200,14 +200,14 @@ public class PMTree {
          * After that we are going to traverse the right side of the tree also recursively
          */
         if(sum <= prime_shortest){
-            inorder_traversal_method(head_node.left, prime_shortest);
+            inorder_traversal_method_recur(head_node.left, prime_shortest);
             sum++;
 
             if(sum == prime_shortest){
                 nth_short_found = head_node.name;
                 return;
             }
-            inorder_traversal_method(head_node.right, prime_shortest);
+            inorder_traversal_method_recur(head_node.right, prime_shortest);
         }        
     }
 
