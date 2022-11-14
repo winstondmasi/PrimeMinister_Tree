@@ -32,6 +32,14 @@ public class PMTree {
         Node checking = root;
         nth_short_found = " ";
 
+        /*
+        loop to check if the day we put as a parameter is the
+        same as the day in the list we'll be traversing through
+
+        while loop is true if the day is equal to node.day
+        nth_short_found will be assigned to the node.name and return it if it's correct
+        if not check left and right node and increment iteratively until first if statement is correct
+        */
         while(true){
             if(days == checking.days){
                 nth_short_found = checking.name;
@@ -76,7 +84,7 @@ public class PMTree {
 
         while (true) {
             if (days == cur.days){
-                cur.name = name; //if tree with duplicate day exists update the name to match
+                cur.name = name; // EXER 1 if tree with duplicate day exists update the name to match
                 return;
             }
             else if (days < cur.days) {
@@ -227,7 +235,9 @@ public class PMTree {
         ArrayList<PMList.Entry> prime_miniArrayList = (ArrayList<PMList.Entry>)PMList.getPrimeMinisters();
         for(PMList.Entry getInfo : prime_miniArrayList){resulting_PmTree.insert(getInfo.days, getInfo.name);}
 
-        /*OR ANOTHER SOLUTION TO INSERT DAYS AND NAME
+        /*
+        OR ANOTHER SOLUTION TO INSERT DAYS AND NAME
+
         for(int w = 0; i < PMList.getPrimeMinisters().size(); w++){
             resulting_PmTree.insert(PMList.getPrimeMinisters().get(w).days, PMList.getPrimeMinisters().get(w).name);
         }
@@ -254,9 +264,15 @@ public class PMTree {
         String[] deleted_impartial = resulting_PmTree.allNShortest(11);
         for(String erased : deleted_impartial){ System.out.println(erased);}
 
+        /*
         System.out.println("\n" + "Testing getName() method: " + "\n");
         System.out.println("getName (49 days): " + resulting_PmTree.getName(49));
         System.out.println("getName (3 years and 259 days): " + resulting_PmTree.getName(365* 3 + 259));
         System.out.println("getName (6 years and 255 days): " + resulting_PmTree.getName(365* 6 + 255));
+        System.out.println("getName (10 years and 56 days): " + resulting_PmTree.getName(365*10 +  56));
+
+        resulting_PmTree.insert(23, "John Stewart");
+        System.out.println("Insert day(23) is: " + resulting_PmTree.getName(23));
+         */
     }
 }
